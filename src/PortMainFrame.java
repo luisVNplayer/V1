@@ -1,8 +1,13 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.*;
 
-public class PortMainFrame {
+public class PortMainFrame extends JFrame{
     private JTextField idTextField;
     private JTextField weightTextField;
     private JPanel mainPanel;
@@ -48,52 +53,60 @@ public class PortMainFrame {
         pileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Container cont = new Container();
-                int which = 1;
-                cont.setID(Integer.parseInt(idTextField.getText()));
-                cont.setWeight(Integer.parseInt(weightTextField.getText()));
-                cont.setSender(remCompTextField.getText());
-                cont.setReceiver(recCompTextField.getText());
-                if (a1RadioButton.isSelected()){
-                    cont.setPriority(1);
-                }
-                if (a2RadioButton.isSelected()){
-                    cont.setPriority(2);
-                }
-                if (a3RadioButton.isSelected()){
-                    cont.setPriority(3);
-                }
-                cont.setDescription(descTextArea.getText());
-                cont.setCountry((String) countryComboBox.getSelectedItem());
-                if (customInspCheckBox.isSelected()){
-                    cont.setInspected(true);
-                }
-                else {
-                    cont.setInspected(false);
-                }
-                iwishnt = 1;
-                if (port.hub1.stackCont(cont) == -1){
-                    which+=1;
-                    iwishnt = 2;
-                    if (port.hub2.stackCont(cont)==-1){
-                        which+=1;
-                        iwishnt = 3;
-                        if (port.hub3.stackCont(cont)==-1){
-                            which+=1;
-                            descTextArea.setText("The columns are full.");
+                    Container cont = new Container();
+                    int which = 1;
+                    try{
+                    cont.setID(Integer.parseInt(idTextField.getText()));
+                    try{
+                        cont.setWeight(Integer.parseInt(weightTextField.getText()));
+                        cont.setSender(remCompTextField.getText());
+                        cont.setReceiver(recCompTextField.getText());
+                        if (a1RadioButton.isSelected()){
+                            cont.setPriority(1);
                         }
+                        if (a2RadioButton.isSelected()){
+                            cont.setPriority(2);
+                        }
+                        if (a3RadioButton.isSelected()){
+                            cont.setPriority(3);
+                        }
+                        cont.setDescription(descTextArea.getText());
+                        cont.setCountry((String) countryComboBox.getSelectedItem());
+                        if (customInspCheckBox.isSelected()){
+                            cont.setInspected(true);
+                        }
+                        else {
+                            cont.setInspected(false);
+                        }
+                        iwishnt = 1;
+                        if (port.hub1.stackCont(cont) == -1){
+                            which+=1;
+                            iwishnt = 2;
+                            if (port.hub2.stackCont(cont)==-1){
+                                which+=1;
+                                iwishnt = 3;
+                                if (port.hub3.stackCont(cont)==-1){
+                                    which+=1;
+                                    descTextArea.setText("Please select a correct priority value.");
+                                }
+                            }
+                        }
+                        if (which == 1){
+                            stateTextArea.setText("HUB 1\n"+port.hub1.hubToString());
+                        }
+                        if (which == 2){
+                            stateTextArea.setText("HUB 2\n"+port.hub2.hubToString());
+                        }
+                        if (which == 3){
+                            stateTextArea.setText("HUB 3\n"+port.hub3.hubToString());
+                        }
+                        idTextField.setText(""+(cont.ID+1));
+                    } catch (NumberFormatException weightEX){
+                        weightTextField.setText("The weight was incorrect, please enter valid data (integer).");
                     }
-                }
-                if (which == 1){
-                    stateTextArea.setText("HUB 1\n"+port.hub1.hubToString());
-                }
-                if (which == 2){
-                    stateTextArea.setText("HUB 2\n"+port.hub2.hubToString());
-                }
-                if (which == 3){
-                    stateTextArea.setText("HUB 3\n"+port.hub3.hubToString());
-                }
-                idTextField.setText(""+(cont.ID+1));
+                    } catch (NumberFormatException IDEX){
+                        idTextField.setText("The ID was incorrect, please enter valid data (integer).");
+                    }
             }
         });
         showDescButton.addActionListener(new ActionListener() {
@@ -158,7 +171,7 @@ public class PortMainFrame {
         hub1RadioButton.addActionListener(listener);
         hub2RadioButton.addActionListener(listener);
         hub3RadioButton.addActionListener(listener);
-    }
+        }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("PortMainFrame");
