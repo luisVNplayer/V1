@@ -112,6 +112,7 @@ public class PortMainFrame extends JFrame{
         showDescButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try{
                 if (!port.hub1.dataContID(Integer.parseInt(textArea1.getText())).equals("Not found")){
                     contDescTextArea.setText(port.hub1.dataContID(Integer.parseInt(textArea1.getText())));
                 }
@@ -121,6 +122,13 @@ public class PortMainFrame extends JFrame{
                 if (!port.hub3.dataContID(Integer.parseInt(textArea1.getText())).equals("Not found")){
                     contDescTextArea.setText(port.hub3.dataContID(Integer.parseInt(textArea1.getText())));
                 }
+                else{
+                    textArea1.setText("No container with the ID "+textArea1.getText()+ "exists.");
+                }
+                } catch (NumberFormatException toShowEX){
+                    textArea1.setText("Please enter a valid ID number (integer).");
+                }
+
             }
         });
         unpileButton.addActionListener(new ActionListener() {
