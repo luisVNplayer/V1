@@ -1,11 +1,6 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.*;
 
 public class PortMainFrame extends JFrame{
     private JTextField idTextField;
@@ -43,6 +38,10 @@ public class PortMainFrame extends JFrame{
     private JRadioButton hub1RadioButton;
     private JRadioButton hub2RadioButton;
     private JRadioButton hub3RadioButton;
+    private JButton newButton;
+    private JTextField hubToCheckTextField;
+    private JTextField weightToCheckTextField;
+    private JButton checkButton;
     private JLabel imageLabel;
     Port port = new Port();
     int iwishnt = 1;
@@ -179,7 +178,14 @@ public class PortMainFrame extends JFrame{
         hub1RadioButton.addActionListener(listener);
         hub2RadioButton.addActionListener(listener);
         hub3RadioButton.addActionListener(listener);
-        }
+
+        checkButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,port.markCheckLessEqual(Integer.parseInt(weightTextField.getText()),Integer.parseInt(hubToCheckTextField.getText())));
+            }
+        });
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("PortMainFrame");
